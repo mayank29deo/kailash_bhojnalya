@@ -3,13 +3,15 @@ import { useState } from 'react';
 // Logo component — tries the user-supplied asset first, falls back to a
 // crafted SVG so the layout never breaks before the real logo is dropped in.
 //
-// To use the user's upload, place a file at one of these paths (preferred
-// first): /public/logo.png, /public/logo.jpg, /public/logo.jpeg
-// The component will pick whichever loads.
+// The uploaded logo is a square wordmark (leaf emblem + "Kailash Bhojnalaya"
+// text). We render it with `object-contain` and rounded corners so nothing
+// is cropped, and skip the side text wordmark by default since the logo
+// already contains it. Pass `withWordmark` if you need the script tagline
+// alongside the mark in marketing surfaces.
 
 const FALLBACK_PATHS = ['/logo.png', '/logo.jpg', '/logo.jpeg', '/logo.svg'];
 
-export default function Logo({ size = 56, withWordmark = true, className = '' }) {
+export default function Logo({ size = 52, withWordmark = false, className = '' }) {
   const [pathIndex, setPathIndex] = useState(0);
   const [allFailed, setAllFailed] = useState(false);
 
@@ -32,16 +34,13 @@ export default function Logo({ size = 56, withWordmark = true, className = '' })
           width={size}
           height={size}
           onError={tryNext}
-          className="rounded-full object-cover shadow-soft ring-2 ring-leaf-200/70"
+          className="rounded-xl bg-white object-contain p-0.5 shadow-soft"
           style={{ width: size, height: size }}
         />
       )}
       {withWordmark && (
         <div className="flex flex-col leading-tight">
-          <span className="font-display text-lg font-bold tracking-tight text-leaf-800">
-            Kailash Bhojnalaya
-          </span>
-          <span className="font-script text-[13px] -mt-0.5 text-leaf-600">
+          <span className="font-script text-[15px] text-leaf-700">
             Pure Vegetarian · Since 1963
           </span>
         </div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, MapPin, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, MapPin } from 'lucide-react';
 import { restaurant } from '../../config/restaurant.js';
 import OrderCards from './OrderCards.jsx';
 
@@ -23,37 +23,45 @@ export default function Hero() {
         <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-spice-400/15 blur-3xl" />
       </div>
 
-      <div className="section grid gap-12 pt-12 pb-20 lg:grid-cols-12 lg:gap-10 lg:pt-20">
+      <div className="section grid gap-12 pt-8 pb-20 lg:grid-cols-12 lg:gap-10 lg:pt-14">
         {/* Left: copy block */}
         <div className="lg:col-span-7">
+          {/* Brand wordmark — the page's first identity beat */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={0}
-            className="pill-leaf"
           >
-            <Sparkles className="h-3.5 w-3.5" /> Heritage kitchen · Since 1963
+            <p className="font-script text-lg text-leaf-600">Welcome to</p>
+            <h1 className="heading-display mt-1 text-5xl leading-[0.95] sm:text-6xl lg:text-[80px]">
+              Kailash{' '}
+              <span className="gradient-text">Bhojnalaya</span>
+            </h1>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="h-px w-10 bg-leaf-300" />
+              <p className="font-script text-base text-leaf-700/90 sm:text-lg">
+                Add Spice to Your Life · Pure Vegetarian Since 1963
+              </p>
+            </div>
           </motion.div>
 
-          <motion.h1
+          <motion.p
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={1}
-            className="heading-display mt-5 text-4xl leading-[1.05] sm:text-5xl lg:text-[64px]"
+            className="mt-8 max-w-xl font-display text-2xl leading-snug text-leaf-900 sm:text-[28px]"
           >
-            A taste of Deoghar's
-            <br />
-            <span className="gradient-text">pure-vegetarian heritage.</span>
-          </motion.h1>
+            A taste of Deoghar's <span className="gradient-text">pure-vegetarian heritage.</span>
+          </motion.p>
 
           <motion.p
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={2}
-            className="mt-6 max-w-xl text-base leading-relaxed text-leaf-800/80 sm:text-lg"
+            className="mt-4 max-w-xl text-base leading-relaxed text-leaf-800/80"
           >
             Three generations of Kailash family recipes — thalis, paneer, dals, and
             handmade rotis — served fresh on Station Road. Now a tap away on Zomato

@@ -8,6 +8,7 @@ const navItems = [
   { to: '/', label: 'Home' },
   { to: '/menu', label: 'Menu' },
   { to: '/about', label: 'Our Story' },
+  { to: '/#reviews', label: 'Reviews', hash: true },
   { to: '/contact', label: 'Visit Us' },
 ];
 
@@ -39,30 +40,41 @@ export default function Navbar() {
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
-          {navItems.map((item) => (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'text-leaf-800'
-                      : 'text-leaf-700/80 hover:text-leaf-800'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.label}
-                    {isActive && (
-                      <span className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-leaf-400 to-leaf-700" />
-                    )}
-                  </>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {navItems.map((item) =>
+            item.hash ? (
+              <li key={item.to}>
+                <Link
+                  to={item.to}
+                  className="rounded-full px-4 py-2 text-sm font-medium text-leaf-700/80 transition-colors hover:text-leaf-800"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ) : (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  end={item.to === '/'}
+                  className={({ isActive }) =>
+                    `relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      isActive
+                        ? 'text-leaf-800'
+                        : 'text-leaf-700/80 hover:text-leaf-800'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {item.label}
+                      {isActive && (
+                        <span className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-leaf-400 to-leaf-700" />
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            )
+          )}
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
@@ -97,23 +109,34 @@ export default function Navbar() {
       {open && (
         <div className="lg:hidden border-t border-leaf-100/70 bg-white/95 backdrop-blur-xl">
           <ul className="section flex flex-col gap-1 py-4">
-            {navItems.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    `block rounded-2xl px-4 py-3 text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-leaf-100/80 text-leaf-800'
-                        : 'text-leaf-800 hover:bg-leaf-50'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
+            {navItems.map((item) =>
+              item.hash ? (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="block rounded-2xl px-4 py-3 text-sm font-medium text-leaf-800 transition-colors hover:bg-leaf-50"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ) : (
+                <li key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    end={item.to === '/'}
+                    className={({ isActive }) =>
+                      `block rounded-2xl px-4 py-3 text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-leaf-100/80 text-leaf-800'
+                          : 'text-leaf-800 hover:bg-leaf-50'
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              )
+            )}
             <li className="mt-2 grid grid-cols-2 gap-2">
               <a
                 href={`tel:${restaurant.phone}`}
