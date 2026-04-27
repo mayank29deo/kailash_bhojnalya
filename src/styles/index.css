@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-leaf-soft text-leaf-900 font-sans;
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-leaf-300 text-leaf-900;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-cream-50;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-leaf-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-leaf-500;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-ring;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium;
+  }
+
+  .pill-leaf {
+    @apply pill bg-leaf-100 text-leaf-700;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-leaf-500/40;
+  }
+
+  .btn-primary {
+    @apply btn bg-leaf-600 text-white hover:bg-leaf-700 shadow-glow hover:shadow-[0_25px_70px_-25px_rgba(31,79,53,0.65)] hover:-translate-y-0.5;
+  }
+
+  .btn-ghost {
+    @apply btn border border-leaf-300 bg-white/60 text-leaf-800 hover:bg-leaf-50;
+  }
+
+  .section {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  .heading-display {
+    @apply font-display text-leaf-900 tracking-tight;
+  }
+
+  .veg-dot {
+    @apply inline-block h-3.5 w-3.5 rounded-sm border-2 border-leaf-600 p-[1px];
+  }
+  .veg-dot::after {
+    content: '';
+    @apply block h-full w-full rounded-[1px] bg-leaf-600;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #256340 0%, #3f9a64 50%, #67b685 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .divider-leaf {
+    @apply flex items-center gap-3 text-leaf-500;
+  }
+  .divider-leaf::before,
+  .divider-leaf::after {
+    content: '';
+    @apply h-px flex-1 bg-gradient-to-r from-transparent via-leaf-300 to-transparent;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

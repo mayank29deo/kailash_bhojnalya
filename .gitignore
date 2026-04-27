@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+.DS_Store
+*.log
+.vite
+.vscode/*
+!.vscode/extensions.json
+
+# Private menu reference photos (not part of the deployed app)
+WhatsApp Image*.jpeg
+WhatsApp Image*.jpg
+WhatsApp Image*.png
