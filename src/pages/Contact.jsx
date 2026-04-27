@@ -49,7 +49,7 @@ export default function Contact() {
   };
 
   const whatsappLink = `https://wa.me/${restaurant.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
-    "Hello Kailash Bhojnalya, I'd like to enquire about "
+    "Hello Kailash Bhojnalaya, I'd like to enquire about "
   )}`;
 
   return (
@@ -79,8 +79,8 @@ export default function Contact() {
             <div className="overflow-hidden rounded-3xl border border-white/70 bg-white/70 backdrop-blur shadow-soft">
               <div className="aspect-[16/10] w-full">
                 <iframe
-                  title="Kailash Bhojnalya — Station Road, Deoghar"
-                  src="https://www.google.com/maps?q=Kailash+Bhojnalya+Station+Road+Deoghar&output=embed"
+                  title="Kailash Bhojnalaya — Station Road, Deoghar"
+                  src="https://www.google.com/maps?q=Kailash+Bhojnalaya+Station+Road+Deoghar&output=embed"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="h-full w-full"

@@ -69,7 +69,7 @@ export default function Navbar() {
           <a
             href={`tel:${restaurant.phone}`}
             className="btn-ghost group !px-4 !py-2 text-xs"
-            aria-label="Call Kailash Bhojnalya"
+            aria-label="Call Kailash Bhojnalaya"
           >
             <Phone className="h-4 w-4 transition-transform group-hover:rotate-12" />
             {restaurant.phone}

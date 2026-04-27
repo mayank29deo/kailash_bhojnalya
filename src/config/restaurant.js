@@ -3,7 +3,7 @@
 // without touching component code.
 
 export const restaurant = {
-  name: 'Kailash Bhojnalya',
+  name: 'Kailash Bhojnalaya',
   tagline: 'Add Spice to Your Life',
   established: 1963,
   cuisineTags: ['Pure Vegetarian', 'North Indian', 'South Indian', 'Chinese', 'Thali'],
@@ -33,7 +33,7 @@ export const restaurant = {
     swiggy:
       import.meta.env.VITE_SWIGGY_URL ||
       'https://www.swiggy.com/restaurants/kailash-bhojnalya-deoghar',
-    googleMaps: 'https://www.google.com/maps/search/?api=1&query=Kailash+Bhojnalya+Deoghar',
+    googleMaps: 'https://www.google.com/maps/search/?api=1&query=Kailash+Bhojnalaya+Deoghar',
   },
 
   social: {
@@ -46,7 +46,7 @@ export const restaurant = {
     short:
       'Three generations of pure-vegetarian flavour, lovingly served from Station Road, Deoghar — since 1963.',
     long:
-      'For over six decades, Kailash Bhojnalya has been the heart of authentic vegetarian dining in Deoghar. What began in 1963 as a humble kitchen on Station Road has grown into a beloved name across Jharkhand — celebrated by pilgrims, locals, and travellers for thalis, parathas, and paneer dishes that taste exactly the way they did when our grandfathers first cooked them.',
+      'For over six decades, Kailash Bhojnalaya has been the heart of authentic vegetarian dining in Deoghar. What began in 1963 as a humble kitchen on Station Road has grown into a beloved name across Jharkhand — celebrated by pilgrims, locals, and travellers for thalis, parathas, and paneer dishes that taste exactly the way they did when our grandfathers first cooked them.',
     pillars: [
       {
         title: 'Pure Vegetarian, Always',

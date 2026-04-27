@@ -1,9 +1,9 @@
 {
-  "name": "kailash-bhojnalya",
+  "name": "kailash-bhojnalaya",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Official web platform for Kailash Bhojnalya — Pure Vegetarian Indian Restaurant, Deoghar, Jharkhand. Heritage since 1963.",
+  "description": "Official web platform for Kailash Bhojnalaya — Pure Vegetarian Indian Restaurant, Deoghar, Jharkhand. Heritage since 1963.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -1,4 +1,4 @@
--- Kailash Bhojnalya — Supabase schema bootstrap
+-- Kailash Bhojnalaya — Supabase schema bootstrap
 -- Run this in Supabase SQL editor once the project is created.
 -- The app degrades gracefully if these tables don't exist yet.
 

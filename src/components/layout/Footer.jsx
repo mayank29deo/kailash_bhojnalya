@@ -112,7 +112,7 @@ export default function Footer() {
       <div className="border-t border-leaf-100/70">
         <div className="section flex flex-col items-center justify-between gap-2 py-5 text-xs text-leaf-700/70 sm:flex-row">
           <p>
-            © {year} Kailash Bhojnalya · Station Road, Deoghar · {restaurant.notes.gst}
+            © {year} Kailash Bhojnalaya · Station Road, Deoghar · {restaurant.notes.gst}
           </p>
           <p className="font-medium text-leaf-700">
             Service is our motto.

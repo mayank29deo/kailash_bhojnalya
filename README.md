@@ -1,4 +1,4 @@
-# Kailash Bhojnalya — Web Platform
+# Kailash Bhojnalaya — Web Platform
 
 Heritage pure-vegetarian restaurant in Deoghar, Jharkhand. Operating since **1963**.
 This web app is a digital storefront that complements the existing Zomato / Swiggy / Google Maps presence — pilot focus is delighting users who land on the page from a Google Business / Maps search and giving them a frictionless path to the menu, ordering, and contact.

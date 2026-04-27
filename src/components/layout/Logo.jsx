@@ -28,7 +28,7 @@ export default function Logo({ size = 56, withWordmark = true, className = '' })
       ) : (
         <img
           src={FALLBACK_PATHS[pathIndex]}
-          alt="Kailash Bhojnalya logo"
+          alt="Kailash Bhojnalaya logo"
           width={size}
           height={size}
           onError={tryNext}
@@ -39,7 +39,7 @@ export default function Logo({ size = 56, withWordmark = true, className = '' })
       {withWordmark && (
         <div className="flex flex-col leading-tight">
           <span className="font-display text-lg font-bold tracking-tight text-leaf-800">
-            Kailash Bhojnalya
+            Kailash Bhojnalaya
           </span>
           <span className="font-script text-[13px] -mt-0.5 text-leaf-600">
             Pure Vegetarian · Since 1963
@@ -55,7 +55,7 @@ function SvgFallback({ size }) {
     <div
       className="flex items-center justify-center rounded-full bg-gradient-to-br from-leaf-100 to-leaf-300 shadow-soft ring-2 ring-leaf-200/70"
       style={{ width: size, height: size }}
-      aria-label="Kailash Bhojnalya"
+      aria-label="Kailash Bhojnalaya"
     >
       <svg viewBox="0 0 64 64" width={size * 0.62} height={size * 0.62} aria-hidden="true">
         <defs>
