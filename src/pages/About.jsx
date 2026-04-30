@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Sparkles, Leaf, Award, Heart, Users } from 'lucide-react';
 import { restaurant } from '../config/restaurant.js';
+import Storefront from '../components/home/Storefront.jsx';
 
 const timeline = [
   {
@@ -99,6 +100,8 @@ export default function About() {
           })}
         </div>
       </section>
+
+      <Storefront variant="about" />
 
       <section className="section pb-24">
         <div className="mx-auto max-w-3xl">

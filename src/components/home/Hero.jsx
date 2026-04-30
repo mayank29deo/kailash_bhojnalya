@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Star, MapPin } from 'lucide-react';
 import { restaurant } from '../../config/restaurant.js';
 import OrderCards from './OrderCards.jsx';
+import HeroBackdrop from './HeroBackdrop.jsx';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -16,10 +17,13 @@ const fadeUp = {
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Decorative background blobs */}
+      {/* Storefront photo, heavily blurred + cream-leaf wash */}
+      <HeroBackdrop />
+
+      {/* Decorative blobs sit on top of the backdrop for extra colour */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 -left-20 h-96 w-96 rounded-full bg-leaf-200/50 blur-3xl" />
-        <div className="absolute top-1/3 -right-24 h-[28rem] w-[28rem] rounded-full bg-leaf-100/70 blur-3xl" />
+        <div className="absolute -top-32 -left-20 h-96 w-96 rounded-full bg-leaf-200/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-24 h-[28rem] w-[28rem] rounded-full bg-leaf-100/60 blur-3xl" />
         <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-spice-400/15 blur-3xl" />
       </div>
 
