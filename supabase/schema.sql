@@ -52,14 +52,70 @@ create table if not exists public.enquiries (
   created_at  timestamptz not null default now()
 );
 
--- 5. Row Level Security -------------------------------------------------------
--- Public can read menu + reviews; only authenticated owners write.
--- Anonymous users may insert enquiries but never read them.
+-- 5. Profiles (linked to Supabase Auth) ---------------------------------------
+-- Holds Google sign-in details + the customer's preferred phone for orders.
+create table if not exists public.profiles (
+  id          uuid primary key references auth.users(id) on delete cascade,
+  email       text,
+  full_name   text,
+  phone       text,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
 
+-- 6. Saved delivery addresses -------------------------------------------------
+create table if not exists public.user_addresses (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references auth.users(id) on delete cascade,
+  label           text,                          -- 'Home', 'Office', etc.
+  recipient_name  text,
+  phone           text,
+  line1           text not null,
+  line2           text,
+  landmark        text,
+  city            text not null default 'Deoghar',
+  state           text not null default 'Jharkhand',
+  pincode         text not null,
+  is_default      boolean not null default false,
+  created_at      timestamptz not null default now()
+);
+create index if not exists user_addresses_user_idx on public.user_addresses(user_id);
+
+-- 7. Orders -------------------------------------------------------------------
+-- user_id is nullable so guests (Phase 1, no auth) can also order. The
+-- delivery_address and items are denormalised so an order remains intact
+-- if profile/menu data later changes.
+create table if not exists public.orders (
+  id                    uuid primary key default gen_random_uuid(),
+  user_id               uuid references auth.users(id) on delete set null,
+  customer_name         text not null,
+  customer_phone        text not null,
+  customer_email        text,
+  delivery_address      jsonb not null,
+  items                 jsonb not null,
+  subtotal              int not null,
+  packaging_fee         int not null default 0,
+  gst_amount            int not null default 0,
+  total                 int not null,
+  payment_method        text not null default 'cod',
+  status                text not null default 'pending',
+                        -- pending | confirmed | preparing | out_for_delivery | delivered | cancelled
+  special_instructions  text,
+  whatsapp_sent_at      timestamptz,
+  created_at            timestamptz not null default now()
+);
+create index if not exists orders_user_idx on public.orders(user_id);
+create index if not exists orders_status_idx on public.orders(status);
+create index if not exists orders_created_idx on public.orders(created_at desc);
+
+-- 8. Row Level Security -------------------------------------------------------
 alter table public.menu_categories enable row level security;
 alter table public.menu_items      enable row level security;
 alter table public.reviews         enable row level security;
 alter table public.enquiries       enable row level security;
+alter table public.profiles        enable row level security;
+alter table public.user_addresses  enable row level security;
+alter table public.orders          enable row level security;
 
 create policy if not exists "menu_categories readable" on public.menu_categories
   for select using (true);
@@ -72,3 +128,24 @@ create policy if not exists "reviews readable" on public.reviews
 
 create policy if not exists "enquiries insertable" on public.enquiries
   for insert with check (true);
+
+-- Profiles: each user can read & update only their own row
+create policy if not exists "profiles self-readable" on public.profiles
+  for select using (auth.uid() = id);
+create policy if not exists "profiles self-writable" on public.profiles
+  for insert with check (auth.uid() = id);
+create policy if not exists "profiles self-updatable" on public.profiles
+  for update using (auth.uid() = id);
+
+-- Addresses: each user can CRUD only their own
+create policy if not exists "addresses self-readable" on public.user_addresses
+  for select using (auth.uid() = user_id);
+create policy if not exists "addresses self-writable" on public.user_addresses
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Orders: anyone (incl. anon) can place an order.
+-- Reads are restricted: customer can read own orders; owner via service role.
+create policy if not exists "orders insertable by anyone" on public.orders
+  for insert with check (true);
+create policy if not exists "orders readable by owner of order" on public.orders
+  for select using (auth.uid() = user_id);

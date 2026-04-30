@@ -146,7 +146,11 @@ function CategoryBlock({ category }) {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {category.items.map((item, idx) => (
-            <MenuItemCard key={item.id} item={item} index={idx} />
+            <MenuItemCard
+              key={item.id}
+              item={{ ...item, categoryId: category.id, categoryName: category.name }}
+              index={idx}
+            />
           ))}
         </div>
       </div>

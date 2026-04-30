@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import QuantityStepper from '../cart/QuantityStepper.jsx';
 
 // Looks for /menu/<id>.jpg. If absent, the thumbnail block hides
 // completely so a partial image rollout still looks clean.
@@ -64,8 +65,9 @@ export default function MenuItemCard({ item, index = 0 }) {
             </div>
           )}
         </div>
-        <div className="text-right">
+        <div className="flex shrink-0 flex-col items-end gap-2 text-right">
           <span className="font-display text-lg font-bold text-leaf-800">{item.price}</span>
+          {item.priceNum > 0 && <QuantityStepper item={item} />}
         </div>
       </div>
     </motion.div>
