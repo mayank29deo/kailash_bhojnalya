@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, MapPin } from 'lucide-react';
+import { ArrowRight, Star, MapPin, ChefHat } from 'lucide-react';
 import { restaurant } from '../../config/restaurant.js';
 import OrderCards from './OrderCards.jsx';
 import HeroBackdrop from './HeroBackdrop.jsx';
@@ -92,6 +92,13 @@ export default function Hero() {
               <MapPin className="h-4 w-4" />
               Find us on Maps
             </a>
+            <Link
+              to="/#catering"
+              className="btn border border-spice-500/60 bg-spice-400/35 text-spice-600 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-spice-600/70 hover:bg-spice-400/55 hover:text-spice-600 focus:ring-spice-500/40"
+            >
+              <ChefHat className="h-4 w-4" />
+              Catering Services
+            </Link>
           </motion.div>
 
           <motion.div

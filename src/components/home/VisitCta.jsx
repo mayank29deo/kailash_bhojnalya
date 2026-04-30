@@ -5,7 +5,7 @@ import { restaurant } from '../../config/restaurant.js';
 
 export default function VisitCta() {
   return (
-    <section className="section pb-20">
+    <section id="catering" className="section scroll-mt-24 pb-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
