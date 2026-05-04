@@ -32,6 +32,7 @@ export default {
         display: ['"Playfair Display"', 'serif'],
         sans: ['"Inter"', 'system-ui', 'sans-serif'],
         script: ['"Dancing Script"', 'cursive'],
+        devanagari: ['"Yatra One"', '"Mukta"', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'leaf-gradient':

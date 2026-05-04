@@ -12,11 +12,11 @@ import ThaliVisual from './ThaliVisual.jsx';
 
 const STORAGE_KEY = 'kb-thali-intro-shown';
 
-const TOTAL = 5.5;
+const TOTAL = 6.5;
 // keyframe progress points
-const ENTER_END = 0.32; // 0.00 → 1.76s : descend
-const HOLD_END = 0.74;  // 1.76 → 4.07s : sit & breathe
-// 0.74 → 1.00 (4.07 → 5.50s)            : carry away
+const ENTER_END = 0.26; // 0.00 → 1.69s : descend
+const HOLD_END = 0.85;  // 1.69 → 5.53s : sit & breathe (longer for branding)
+// 0.85 → 1.00 (5.53 → 6.50s)            : carry away
 
 // silky, restaurant-grade easing
 const enterEase = [0.16, 1, 0.3, 1];   // easeOutQuint
@@ -74,7 +74,8 @@ export default function LandingThaliIntro() {
 
           {/* the thali itself */}
           <motion.div
-            className="relative aspect-[3/2] w-80 sm:w-[32rem] lg:w-[40rem]"
+            className="relative aspect-[3/2] w-80 transform-gpu sm:w-[32rem] lg:w-[40rem]"
+            style={{ willChange: 'transform, opacity' }}
             initial={{ y: '-100vh', scale: 0.7, opacity: 0, rotate: -4 }}
             animate={{
               y: ['-100vh', '0%', '0%', '100vh'],
@@ -89,16 +90,40 @@ export default function LandingThaliIntro() {
             }}
             onAnimationComplete={() => setShow(false)}
           >
+            {/* Hindi signage above the plate — lights up AS the plate lands, dims as the plate leaves */}
+            <motion.div
+              className="absolute inset-x-0 -top-14 text-center sm:-top-20 lg:-top-24"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: [0, 0, 1, 1, 0], y: [6, 6, 0, 0, -4] }}
+              transition={{
+                duration: TOTAL,
+                times: [0, ENTER_END * 0.85, ENTER_END + 0.04, HOLD_END - 0.02, HOLD_END],
+                ease: 'easeInOut',
+              }}
+            >
+              <span
+                className="font-devanagari text-3xl font-bold leading-none sm:text-5xl lg:text-6xl"
+                style={{
+                  color: '#c1272d',
+                  textShadow:
+                    '0 2px 0 rgba(120,18,22,0.35), 0 4px 0 rgba(0,0,0,0.18), 0 12px 32px rgba(193,39,45,0.28)',
+                  letterSpacing: '0.01em',
+                }}
+              >
+                कैलाश भोजनालय
+              </span>
+            </motion.div>
+
             <ThaliVisual shape="soft" />
 
-            {/* heritage tagline appears mid-hold, leaves before exit */}
+            {/* heritage tagline below — fades in mid-hold, leaves before exit */}
             <motion.div
               className="absolute inset-x-0 -bottom-20 text-center sm:-bottom-24"
               initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: [0, 0, 0, 1, 1, 0], y: [12, 12, 12, 0, 0, -6] }}
+              animate={{ opacity: [0, 0, 1, 1, 0], y: [12, 12, 0, 0, -6] }}
               transition={{
                 duration: TOTAL,
-                times: [0, ENTER_END, ENTER_END + 0.08, ENTER_END + 0.18, HOLD_END - 0.04, HOLD_END],
+                times: [0, ENTER_END + 0.06, ENTER_END + 0.14, HOLD_END - 0.04, HOLD_END],
                 ease: 'easeInOut',
               }}
             >

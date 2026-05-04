@@ -30,18 +30,27 @@ export default function Hero() {
       <div className="section grid gap-12 pt-8 pb-20 lg:grid-cols-12 lg:gap-10 lg:pt-14">
         {/* Left: copy block */}
         <div className="lg:col-span-7">
-          {/* Brand wordmark — the page's first identity beat */}
+          {/* Brand wordmark — Hindi signage as primary, English transliteration below */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={0}
           >
-            <p className="font-script text-lg text-leaf-600">Welcome to</p>
-            <h1 className="heading-display mt-1 text-5xl leading-[0.95] sm:text-6xl lg:text-[80px]">
-              Kailash{' '}
-              <span className="gradient-text">Bhojnalaya</span>
+            <h1
+              className="font-devanagari text-[44px] font-bold leading-[1.18] sm:text-6xl lg:text-[84px]"
+              style={{
+                color: '#c1272d',
+                textShadow:
+                  '0 2px 0 rgba(120,18,22,0.28), 0 4px 0 rgba(0,0,0,0.12), 0 14px 32px rgba(193,39,45,0.22)',
+                letterSpacing: '0.005em',
+              }}
+            >
+              कैलाश भोजनालय
             </h1>
+            <p className="heading-display mt-3 text-xl tracking-tight text-leaf-800 sm:text-2xl lg:text-3xl">
+              Kailash <span className="gradient-text">Bhojnalaya</span>
+            </p>
             <div className="mt-3 flex items-center gap-3">
               <span className="h-px w-10 bg-leaf-300" />
               <p className="font-script text-base text-leaf-700/90 sm:text-lg">

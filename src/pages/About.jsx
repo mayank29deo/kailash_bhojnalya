@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Leaf, Award, Heart, Users } from 'lucide-react';
 import { restaurant } from '../config/restaurant.js';
 import Storefront from '../components/home/Storefront.jsx';
+
+const HERITAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const timeline = [
   {
@@ -9,6 +12,10 @@ const timeline = [
     title: 'A small kitchen on Station Road',
     body:
       'The first Kailash kitchen opens its doors with a single goal — to serve home-style vegetarian food to pilgrims and travellers passing through Deoghar.',
+    photo: {
+      base: '/heritage-1963',
+      caption: 'Founder Hari Prasad Sah with his founder employees',
+    },
   },
   {
     year: '1980s',
@@ -104,7 +111,7 @@ export default function About() {
       <Storefront variant="about" />
 
       <section className="section pb-24">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-4xl">
           <h2 className="heading-display text-3xl sm:text-4xl text-center">
             A timeline of our kitchen.
           </h2>
@@ -124,16 +131,69 @@ export default function About() {
                 >
                   <Leaf className="h-3.5 w-3.5" />
                 </span>
-                <p className="font-script text-lg text-leaf-600">{t.year}</p>
-                <h3 className="mt-1 font-display text-xl font-semibold text-leaf-900">
-                  {t.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-leaf-700/85">{t.body}</p>
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+                  <div className="flex-1">
+                    <p className="font-script text-lg text-leaf-600">{t.year}</p>
+                    <h3 className="mt-1 font-display text-xl font-semibold text-leaf-900">
+                      {t.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-leaf-700/85">{t.body}</p>
+                  </div>
+                  {t.photo && <HeritagePhoto photo={t.photo} />}
+                </div>
               </motion.li>
             ))}
           </ol>
         </div>
       </section>
     </>
+  );
+}
+
+// Subtle polaroid-style frame for the founder photo. Uses a slight
+// tilt + cream paper background to evoke a physical print pinned to
+// the timeline. Multi-extension auto-detect; hides itself if no file.
+function HeritagePhoto({ photo }) {
+  const [extIdx, setExtIdx] = useState(0);
+  const [hidden, setHidden] = useState(false);
+
+  const handleError = () => {
+    if (extIdx < HERITAGE_EXTENSIONS.length - 1) {
+      setExtIdx((i) => i + 1);
+    } else {
+      setHidden(true);
+    }
+  };
+
+  if (hidden) return null;
+
+  return (
+    <motion.figure
+      initial={{ opacity: 0, y: 14, rotate: -1 }}
+      whileInView={{ opacity: 1, y: 0, rotate: -2.5 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ rotate: 0, scale: 1.02, transition: { duration: 0.3 } }}
+      className="relative shrink-0 cursor-default sm:w-60"
+    >
+      <div className="rounded-md bg-cream-50 p-2 shadow-[0_18px_40px_-18px_rgba(31,79,53,0.55)] ring-1 ring-leaf-100">
+        <img
+          src={`${photo.base}.${HERITAGE_EXTENSIONS[extIdx]}`}
+          alt={photo.caption}
+          loading="lazy"
+          onError={handleError}
+          className="block aspect-square w-full object-cover"
+        />
+        <figcaption className="px-1.5 pt-2.5 text-[11px] leading-snug text-leaf-700/85">
+          <span className="font-script text-[15px] text-leaf-700">From the archives</span>
+          <span className="mt-0.5 block">{photo.caption}</span>
+        </figcaption>
+      </div>
+      {/* tape strip detail at the top — purely decorative */}
+      <span
+        aria-hidden
+        className="absolute -top-2 left-1/2 h-3 w-12 -translate-x-1/2 -rotate-3 rounded-sm bg-leaf-200/70"
+      />
+    </motion.figure>
   );
 }
