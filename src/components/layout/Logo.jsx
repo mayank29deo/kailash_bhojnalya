@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 const FALLBACK_PATHS = ['/logo.png', '/logo.jpg', '/logo.jpeg', '/logo.svg'];
 
-export default function Logo({ size = 52, withWordmark = false, className = '' }) {
+export default function Logo({ size = 64, withWordmark = false, className = '' }) {
   const [pathIndex, setPathIndex] = useState(0);
   const [allFailed, setAllFailed] = useState(false);
 
