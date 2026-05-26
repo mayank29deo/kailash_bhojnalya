@@ -1,7 +1,31 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { getFeaturedItems } from '../../data/menu.js';
+
+// Hero image at the top of each card. Tries /menu/<id>.jpg, hides
+// silently if missing (the existing text-only card still looks fine).
+function DishHero({ id, name }) {
+  const [hidden, setHidden] = useState(false);
+  if (hidden) return null;
+  return (
+    <div className="relative -mx-6 -mt-6 mb-5 aspect-[16/10] overflow-hidden bg-leaf-50">
+      <img
+        src={`/menu/${id}.jpg`}
+        alt={name}
+        loading="lazy"
+        onError={() => setHidden(true)}
+        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+      />
+      {/* subtle bottom gradient so the price/tags below feel anchored */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/15 to-transparent"
+      />
+    </div>
+  );
+}
 
 export default function FeaturedDishes() {
   const items = getFeaturedItems();
@@ -28,7 +52,7 @@ export default function FeaturedDishes() {
         </Link>
       </div>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item, i) => (
           <motion.div
             key={item.id}
@@ -38,6 +62,8 @@ export default function FeaturedDishes() {
             transition={{ duration: 0.5, delay: i * 0.06 }}
             className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/70 p-6 backdrop-blur transition-all hover:-translate-y-1 hover:shadow-ring"
           >
+            <DishHero id={item.id} name={item.name} />
+
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-leaf-600">
