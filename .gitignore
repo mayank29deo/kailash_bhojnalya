@@ -12,3 +12,6 @@ dist
 WhatsApp Image*.jpeg
 WhatsApp Image*.jpg
 WhatsApp Image*.png
+
+# Staging folder for raw menu images before I rename/move them
+_inbox/
