@@ -12,10 +12,12 @@ const timeline = [
     title: 'A small kitchen on Station Road',
     body:
       'The first Kailash kitchen opens its doors with a single goal — to serve home-style vegetarian food to pilgrims and travellers passing through Deoghar.',
-    photo: {
-      base: '/heritage-1963',
-      caption: 'Founder Hari Prasad Sah with his founder employees',
-    },
+    photos: [
+      {
+        base: '/heritage-1963',
+        caption: 'Founder Hari Prasad Sah with his founder employees',
+      },
+    ],
   },
   {
     year: '1980s',
@@ -27,7 +29,25 @@ const timeline = [
     year: '2010s',
     title: 'Listed online — Zomato, Swiggy, Maps',
     body:
-      'Travellers start finding us before they arrive. Our 4.5★ rating and 2,600+ Google interactions are entirely organic.',
+      'Kailash Bhojnalaya finally stepped onto Zomato in late 2019, and Swiggy followed just months later — right as the pandemic reshaped how India ate. Suddenly pilgrims arriving at Baidyanath Dham could browse our menu before they even left their hotels. The numbers grew organically — no ads, no influencers — just word of mouth from regulars who walked in once and kept coming back.',
+    extraBody:
+      'And along the way, more than ten well-known faces have shared a meal at our table — Bhojpuri film stars, MLAs, journalists, social leaders. Some came once on a pilgrimage and stayed for the thali; others now make us a regular stop whenever they pass through Deoghar.',
+    highlights: [
+      { value: '2019', label: 'Listed on Zomato' },
+      { value: '2020', label: 'Swiggy + Google Maps' },
+      { value: '10+', label: 'Celebrity guests so far' },
+      { value: '4.5★', label: 'On 2,600+ Google reviews' },
+    ],
+    photos: [
+      {
+        base: '/heritage-2010v1',
+        caption: 'A treasured moment with our beloved celebrity guests',
+      },
+      {
+        base: '/heritage-2010v2',
+        caption: 'Another cherished visit from the same era',
+      },
+    ],
   },
   {
     year: 'Today',
@@ -138,8 +158,36 @@ export default function About() {
                       {t.title}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-leaf-700/85">{t.body}</p>
+                    {t.extraBody && (
+                      <p className="mt-3 text-sm leading-relaxed text-leaf-700/85">
+                        {t.extraBody}
+                      </p>
+                    )}
+                    {t.highlights && (
+                      <ul className="mt-5 grid gap-3 rounded-2xl border border-leaf-100 bg-leaf-50/60 p-4 sm:grid-cols-2">
+                        {t.highlights.map((h) => (
+                          <li
+                            key={h.value + h.label}
+                            className="flex items-baseline gap-3"
+                          >
+                            <span className="font-display text-lg font-bold leading-none text-leaf-700">
+                              {h.value}
+                            </span>
+                            <span className="text-xs leading-snug text-leaf-700/85">
+                              {h.label}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  {t.photo && <HeritagePhoto photo={t.photo} />}
+                  {t.photos && t.photos.length > 0 && (
+                    <div className="flex flex-col gap-5 sm:w-60">
+                      {t.photos.map((photo, idx) => (
+                        <HeritagePhoto key={photo.base} photo={photo} index={idx} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.li>
             ))}
@@ -152,8 +200,10 @@ export default function About() {
 
 // Subtle polaroid-style frame for the founder photo. Uses a slight
 // tilt + cream paper background to evoke a physical print pinned to
-// the timeline. Multi-extension auto-detect; hides itself if no file.
-function HeritagePhoto({ photo }) {
+// the timeline. When stacked (multiple photos in one timeline entry),
+// alternates tilt direction so the stack looks naturally piled rather
+// than uniformly skewed. Multi-extension auto-detect; hides if no file.
+function HeritagePhoto({ photo, index = 0 }) {
   const [extIdx, setExtIdx] = useState(0);
   const [hidden, setHidden] = useState(false);
 
@@ -167,14 +217,17 @@ function HeritagePhoto({ photo }) {
 
   if (hidden) return null;
 
+  // alternate tilt: -2.5°, +1.8°, -1.4° ...
+  const tilt = index % 2 === 0 ? -2.5 : 1.8;
+
   return (
     <motion.figure
       initial={{ opacity: 0, y: 14, rotate: -1 }}
-      whileInView={{ opacity: 1, y: 0, rotate: -2.5 }}
+      whileInView={{ opacity: 1, y: 0, rotate: tilt }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, delay: 0.2 + index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ rotate: 0, scale: 1.02, transition: { duration: 0.3 } }}
-      className="relative shrink-0 cursor-default sm:w-60"
+      className="relative cursor-default"
     >
       <div className="rounded-md bg-cream-50 p-2 shadow-[0_18px_40px_-18px_rgba(31,79,53,0.55)] ring-1 ring-leaf-100">
         <img
