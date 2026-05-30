@@ -7,17 +7,25 @@ import QuantityStepper from '../cart/QuantityStepper.jsx';
 // Filenames are documented in MENU_IMAGES.md; standardising on .jpg keeps
 // the menu page from generating 80+ fallback requests when empty.
 
-function DishThumb({ id, name }) {
-  const [hidden, setHidden] = useState(false);
-  if (hidden) return null;
+function DishThumb({ id, name, imageUrl }) {
+  // Try imageUrl first (admin-uploaded via Supabase Storage), then the
+  // static /menu/<id>.jpg fallback, then hide silently.
+  const [stage, setStage] = useState(imageUrl ? 'remote' : 'static');
+  if (stage === 'hidden') return null;
+
+  const src = stage === 'remote' ? imageUrl : `/menu/${id}.jpg`;
+  const handleError = () => {
+    if (stage === 'remote') setStage('static');
+    else setStage('hidden');
+  };
 
   return (
     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[28%] bg-leaf-50 ring-1 ring-leaf-100/80 sm:h-20 sm:w-20">
       <img
-        src={`/menu/${id}.jpg`}
+        src={src}
         alt={name}
         loading="lazy"
-        onError={() => setHidden(true)}
+        onError={handleError}
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
       <span
@@ -37,7 +45,7 @@ export default function MenuItemCard({ item, index = 0 }) {
       transition={{ duration: 0.4, delay: Math.min(index * 0.03, 0.3) }}
       className="group relative flex items-start gap-4 rounded-2xl border border-white/70 bg-white/65 p-4 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-leaf-200 hover:bg-white hover:shadow-soft"
     >
-      <DishThumb id={item.id} name={item.name} />
+      <DishThumb id={item.id} name={item.name} imageUrl={item.imageUrl} />
 
       <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
         <div className="min-w-0 flex-1">

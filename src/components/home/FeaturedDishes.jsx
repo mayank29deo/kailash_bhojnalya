@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { getFeaturedItems } from '../../data/menu.js';
+import { fetchMenuCategories } from '../../services/menuService.js';
 
-// Hero image at the top of each card. Tries /menu/<id>.jpg, hides
-// silently if missing (the existing text-only card still looks fine).
-function DishHero({ id, name }) {
-  const [hidden, setHidden] = useState(false);
-  if (hidden) return null;
+// Hero image at the top of each card. Admin-uploaded imageUrl wins;
+// /menu/<id>.jpg is the fallback; if both fail the card collapses to
+// the previous text-only layout.
+function DishHero({ id, name, imageUrl }) {
+  const [stage, setStage] = useState(imageUrl ? 'remote' : 'static');
+  if (stage === 'hidden') return null;
+  const src = stage === 'remote' ? imageUrl : `/menu/${id}.jpg`;
+  const handleError = () => {
+    if (stage === 'remote') setStage('static');
+    else setStage('hidden');
+  };
   return (
     <div className="relative -mx-6 -mt-6 mb-5 aspect-[16/10] overflow-hidden bg-leaf-50">
       <img
-        src={`/menu/${id}.jpg`}
+        src={src}
         alt={name}
         loading="lazy"
-        onError={() => setHidden(true)}
+        onError={handleError}
         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
       />
       {/* subtle bottom gradient so the price/tags below feel anchored */}
@@ -28,7 +35,25 @@ function DishHero({ id, name }) {
 }
 
 export default function FeaturedDishes() {
-  const items = getFeaturedItems();
+  // Start with the static featured list so the section renders instantly;
+  // swap in DB-driven featured items once the fetch resolves.
+  const [items, setItems] = useState(() => getFeaturedItems());
+
+  useEffect(() => {
+    let active = true;
+    fetchMenuCategories().then((cats) => {
+      if (!active) return;
+      const featured = cats.flatMap((c) =>
+        (c.items || [])
+          .filter((i) => i.isFeatured)
+          .map((i) => ({ ...i, categoryName: c.name, categoryId: c.id }))
+      );
+      if (featured.length > 0) setItems(featured);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <section className="section py-16 lg:py-20">
@@ -62,7 +87,7 @@ export default function FeaturedDishes() {
             transition={{ duration: 0.5, delay: i * 0.06 }}
             className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/70 p-6 backdrop-blur transition-all hover:-translate-y-1 hover:shadow-ring"
           >
-            <DishHero id={item.id} name={item.name} />
+            <DishHero id={item.id} name={item.name} imageUrl={item.imageUrl} />
 
             <div className="flex items-start justify-between gap-3">
               <div>

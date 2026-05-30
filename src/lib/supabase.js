@@ -20,7 +20,15 @@ export function getSupabase() {
     return null;
   }
   _client = createClient(url, anonKey, {
-    auth: { persistSession: false },
+    auth: {
+      // Persist admin sessions across page reloads so Bindeshwar stays
+      // logged in. Customer flow doesn't auth, so this is a no-op for
+      // anonymous users.
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storageKey: 'kb-auth',
+    },
   });
   return _client;
 }
