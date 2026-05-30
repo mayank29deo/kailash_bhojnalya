@@ -114,9 +114,17 @@ export default function Footer() {
           <p>
             © {year} Kailash Bhojnalaya · Station Road, Deoghar · {restaurant.notes.gst}
           </p>
-          <p className="font-medium text-leaf-700">
-            Service is our motto.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="font-medium text-leaf-700">Service is our motto.</p>
+            <span aria-hidden className="hidden h-3 w-px bg-leaf-200 sm:block" />
+            <Link
+              to="/admin/login"
+              className="text-leaf-500/80 transition-colors hover:text-leaf-800"
+              title="Owner login — Bindeshwar's admin console"
+            >
+              Owner login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
