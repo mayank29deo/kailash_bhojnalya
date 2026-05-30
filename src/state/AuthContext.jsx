@@ -68,6 +68,19 @@ export function AuthProvider({ children }) {
   const signIn = useCallback(
     async ({ email, password }) => {
       if (!supabase) return { ok: false, error: 'Supabase is not configured.' };
+
+      // Pre-emptively clear any persisted/in-memory session before
+      // signing in. Without this, a browser that previously held a
+      // session whose access was invalidated (e.g. RLS policies were
+      // changed under it) hangs forever in supabase.auth on a silent
+      // token refresh attempt — the spinner stays on "Signing in…"
+      // and nothing surfaces. scope:'local' skips the server round-trip.
+      try {
+        await supabase.auth.signOut({ scope: 'local' });
+      } catch {
+        /* swallow — proceed with the fresh sign-in regardless */
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
