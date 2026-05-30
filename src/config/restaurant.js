@@ -16,8 +16,8 @@ export const restaurant = {
     full: 'Station Road, Deoghar, Jharkhand, India',
   },
 
-  phone: import.meta.env.VITE_PHONE || '+919263891027',
-  whatsapp: import.meta.env.VITE_WHATSAPP || '+919263891027',
+  phone: import.meta.env.VITE_PHONE || '+919835777116',
+  whatsapp: import.meta.env.VITE_WHATSAPP || '+919835777116',
   email: 'hello@kailashbhojnalya.in',
 
   hours: [
