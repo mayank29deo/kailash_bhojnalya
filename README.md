@@ -9,11 +9,28 @@ This web app is a digital storefront that complements the existing Zomato / Swig
 
 ```bash
 npm install
-cp .env.example .env       # fill in Supabase keys when ready
+cp .env.example .env       # fill in Supabase keys
 npm run dev
 ```
 
 Drop the restaurant's logo at `public/logo.png` (or `.jpg`/`.jpeg`) — the `Logo` component picks it up automatically. A leaf-themed SVG fallback is used until then.
+
+## Supabase setup (one-time, per environment)
+
+The project belongs to the restaurant brand at **kailashbhojnalaya1963@gmail.com**, region `ap-northeast-1` (Tokyo). To connect a fresh checkout:
+
+1. **Local `.env`** — paste the two values into `.env` (gitignored):
+
+   ```
+   VITE_SUPABASE_URL=https://njmysbtzvgamywemqpmc.supabase.co
+   VITE_SUPABASE_ANON_KEY=<anon-public key from Project Settings → API Keys>
+   ```
+
+2. **Schema** — run [`supabase/schema.sql`](supabase/schema.sql) once in the Supabase **SQL Editor**. Creates 7 tables (`menu_categories`, `menu_items`, `reviews`, `enquiries`, `profiles`, `user_addresses`, `orders`) and their RLS policies.
+
+3. **Vercel** — Settings → **Environment Variables** → add the same `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for Production, Preview, and Development. Redeploy after saving.
+
+Once steps 1 + 2 are done, every checkout writes to the `orders` table in addition to opening WhatsApp. The codebase falls back gracefully (WhatsApp still works) if Supabase isn't configured or a table is missing.
 
 ---
 

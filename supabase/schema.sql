@@ -117,35 +117,53 @@ alter table public.profiles        enable row level security;
 alter table public.user_addresses  enable row level security;
 alter table public.orders          enable row level security;
 
-create policy if not exists "menu_categories readable" on public.menu_categories
+-- PostgreSQL does NOT support CREATE POLICY IF NOT EXISTS, so each policy
+-- is dropped (no-op if absent) and recreated. Safe to re-run the file.
+
+drop policy if exists "menu_categories readable" on public.menu_categories;
+create policy "menu_categories readable" on public.menu_categories
   for select using (true);
 
-create policy if not exists "menu_items readable" on public.menu_items
+drop policy if exists "menu_items readable" on public.menu_items;
+create policy "menu_items readable" on public.menu_items
   for select using (is_active = true);
 
-create policy if not exists "reviews readable" on public.reviews
+drop policy if exists "reviews readable" on public.reviews;
+create policy "reviews readable" on public.reviews
   for select using (true);
 
-create policy if not exists "enquiries insertable" on public.enquiries
+drop policy if exists "enquiries insertable" on public.enquiries;
+create policy "enquiries insertable" on public.enquiries
   for insert with check (true);
 
 -- Profiles: each user can read & update only their own row
-create policy if not exists "profiles self-readable" on public.profiles
+drop policy if exists "profiles self-readable" on public.profiles;
+create policy "profiles self-readable" on public.profiles
   for select using (auth.uid() = id);
-create policy if not exists "profiles self-writable" on public.profiles
+
+drop policy if exists "profiles self-writable" on public.profiles;
+create policy "profiles self-writable" on public.profiles
   for insert with check (auth.uid() = id);
-create policy if not exists "profiles self-updatable" on public.profiles
+
+drop policy if exists "profiles self-updatable" on public.profiles;
+create policy "profiles self-updatable" on public.profiles
   for update using (auth.uid() = id);
 
 -- Addresses: each user can CRUD only their own
-create policy if not exists "addresses self-readable" on public.user_addresses
+drop policy if exists "addresses self-readable" on public.user_addresses;
+create policy "addresses self-readable" on public.user_addresses
   for select using (auth.uid() = user_id);
-create policy if not exists "addresses self-writable" on public.user_addresses
+
+drop policy if exists "addresses self-writable" on public.user_addresses;
+create policy "addresses self-writable" on public.user_addresses
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- Orders: anyone (incl. anon) can place an order.
 -- Reads are restricted: customer can read own orders; owner via service role.
-create policy if not exists "orders insertable by anyone" on public.orders
+drop policy if exists "orders insertable by anyone" on public.orders;
+create policy "orders insertable by anyone" on public.orders
   for insert with check (true);
-create policy if not exists "orders readable by owner of order" on public.orders
+
+drop policy if exists "orders readable by owner of order" on public.orders;
+create policy "orders readable by owner of order" on public.orders
   for select using (auth.uid() = user_id);
