@@ -2,18 +2,29 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Info, X } from 'lucide-react';
 import { fetchMenuCategories } from '../services/menuService.js';
-import { searchItems, menuMeta } from '../data/menu.js';
+import { searchItems, menuMeta, menuCategories as localMenu } from '../data/menu.js';
 import MenuItemCard from '../components/menu/MenuItemCard.jsx';
 import CategoryNav from '../components/menu/CategoryNav.jsx';
 import { restaurant } from '../config/restaurant.js';
 
 export default function Menu() {
-  const [categories, setCategories] = useState([]);
+  // Optimistic render: start with the bundled static menu so the page
+  // is never empty, even before (or if) the Supabase fetch resolves.
+  // The DB swap happens silently once data arrives.
+  const [categories, setCategories] = useState(() => localMenu);
   const [activeId, setActiveId] = useState('all');
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    fetchMenuCategories().then(setCategories);
+    let active = true;
+    fetchMenuCategories().then((cats) => {
+      if (active && Array.isArray(cats) && cats.length > 0) {
+        setCategories(cats);
+      }
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const visibleCategories = useMemo(() => {

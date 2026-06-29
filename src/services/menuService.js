@@ -42,23 +42,45 @@ function normaliseCategory(row) {
   };
 }
 
+const FETCH_TIMEOUT_MS = 8000;
+
+// Race the Supabase request against a timeout so a stalled mobile
+// connection never leaves the menu page empty. On any failure
+// (network drop, timeout, error response, empty response, thrown
+// exception) we return the bundled static menu instead of throwing.
+//
+// Combined with Menu.jsx using localMenu as its initial state, the
+// effect is: customers ALWAYS see the menu instantly, and DB data
+// silently replaces it if it arrives.
+
 export async function fetchMenuCategories() {
   const supabase = getSupabase();
   if (!supabase) return localMenu;
 
-  const { data, error } = await supabase
-    .from('menu_categories')
-    .select('id, name, tagline, icon, accent, is_featured, sort_order, items:menu_items(*)')
-    .order('sort_order', { ascending: true });
+  try {
+    const fetchPromise = supabase
+      .from('menu_categories')
+      .select('id, name, tagline, icon, accent, is_featured, sort_order, items:menu_items(*)')
+      .order('sort_order', { ascending: true });
 
-  if (error || !data || data.length === 0) {
-    if (error && typeof window !== 'undefined') {
-      console.warn('[menuService] Supabase fetch failed, using static fallback:', error.message);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Supabase request timed out')), FETCH_TIMEOUT_MS)
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
+    if (error || !data || data.length === 0) {
+      if (error && typeof window !== 'undefined') {
+        console.warn('[menuService] Supabase fetch failed, using static fallback:', error.message);
+      }
+      return localMenu;
+    }
+
+    return data.map(normaliseCategory);
+  } catch (err) {
+    if (typeof window !== 'undefined') {
+      console.warn('[menuService] fetch crashed, using static fallback:', err?.message);
     }
     return localMenu;
   }
-
-  return data
-    .map(normaliseCategory)
-    .filter((c) => c.items.length > 0 || !error); // keep empty categories visible too
 }
