@@ -117,8 +117,8 @@ export default function CartDrawer({ open, onClose }) {
                 <div className="border-t border-leaf-100 bg-white/90 px-6 py-5 backdrop-blur">
                   <dl className="space-y-1.5 text-sm">
                     <Row label="Subtotal" value={rupee(cart.subtotal)} />
-                    {cart.packagingFee > 0 && (
-                      <Row label="Thali packaging" value={rupee(cart.packagingFee)} />
+                    {cart.deliveryFee > 0 && (
+                      <Row label="Delivery charge" value={rupee(cart.deliveryFee)} />
                     )}
                     <Row label={`GST (${cart.gstPercent}%)`} value={rupee(cart.gstAmount)} />
                     <div className="my-2 h-px bg-leaf-100" />

@@ -32,7 +32,10 @@ export async function persistOrder({ order, cart }) {
       category_id: i.categoryId,
     })),
     subtotal: cart.subtotal,
-    packaging_fee: cart.packagingFee,
+    // DB column is still named packaging_fee (legacy from the
+    // earlier per-thali packaging model) — it's now used as the
+    // general "delivery/fee" bucket so we don't need a migration.
+    packaging_fee: cart.deliveryFee,
     gst_amount: cart.gstAmount,
     total: cart.total,
     payment_method: order.paymentMethod || 'cod',

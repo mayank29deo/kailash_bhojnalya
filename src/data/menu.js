@@ -14,7 +14,7 @@
 
 export const menuMeta = {
   notice: 'GST charges extra. Pure vegetarian kitchen.',
-  packagingNote: 'Thali packaging adds ₹20 on takeaway.',
+  packagingNote: 'A flat ₹20 delivery charge is added to every order.',
 };
 
 export const menuCategories = [

@@ -12,8 +12,10 @@ const STORAGE_KEY = 'kb-cart-v1';
 
 const CartContext = createContext(null);
 
-// THALI_PACKAGING_FEE applies per thali quantity (per the printed menu)
-const THALI_PACKAGING_FEE = 20;
+// Flat delivery charge applied to every order with items, replacing
+// the earlier per-thali packaging fee. Owner asked for this once the
+// pilot started taking direct orders.
+const DELIVERY_FEE = 20;
 // Conservative GST estimate — actual rate can vary; owner can adjust.
 const GST_PERCENT = 5;
 
@@ -106,19 +108,16 @@ export function CartProvider({ children }) {
     const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
     const subtotal = items.reduce((sum, i) => sum + (i.priceNum || 0) * i.quantity, 0);
 
-    const thaliQty = items
-      .filter((i) => i.categoryId === 'thali')
-      .reduce((sum, i) => sum + i.quantity, 0);
-    const packagingFee = thaliQty * THALI_PACKAGING_FEE;
-    const gstAmount = Math.round(((subtotal + packagingFee) * GST_PERCENT) / 100);
-    const total = subtotal + packagingFee + gstAmount;
+    const deliveryFee = itemCount > 0 ? DELIVERY_FEE : 0;
+    const gstAmount = Math.round(((subtotal + deliveryFee) * GST_PERCENT) / 100);
+    const total = subtotal + deliveryFee + gstAmount;
 
     return {
       items,
       itemsById: state.items,
       itemCount,
       subtotal,
-      packagingFee,
+      deliveryFee,
       gstPercent: GST_PERCENT,
       gstAmount,
       total,

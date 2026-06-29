@@ -273,7 +273,7 @@ export default function Checkout() {
 
             <dl className="space-y-1.5 text-sm">
               <Line label="Subtotal" value={rupee(cart.subtotal)} />
-              {cart.packagingFee > 0 && <Line label="Thali packaging" value={rupee(cart.packagingFee)} />}
+              {cart.deliveryFee > 0 && <Line label="Delivery charge" value={rupee(cart.deliveryFee)} />}
               <Line label={`GST (${cart.gstPercent}%)`} value={rupee(cart.gstAmount)} />
             </dl>
 

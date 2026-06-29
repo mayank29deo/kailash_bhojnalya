@@ -57,7 +57,7 @@ export function formatOrderMessage({ order, cart }) {
 
   lines.push('*Bill*');
   lines.push(`Subtotal: ${rupee(cart.subtotal)}`);
-  if (cart.packagingFee > 0) lines.push(`Thali packaging: ${rupee(cart.packagingFee)}`);
+  if (cart.deliveryFee > 0) lines.push(`Delivery: ${rupee(cart.deliveryFee)}`);
   lines.push(`GST (${cart.gstPercent}%): ${rupee(cart.gstAmount)}`);
   lines.push(`*Total: ${rupee(cart.total)}*`);
   lines.push('');

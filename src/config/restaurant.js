@@ -74,7 +74,7 @@ export const restaurant = {
   notes: {
     gst: 'GST charges will be extra as per applicable rates.',
     alcohol: 'Alcohol is strictly prohibited on our premises.',
-    thaliPackaging: 'An additional ₹20 is charged for thali packaging on takeaway.',
+    thaliPackaging: 'A flat ₹20 delivery charge applies to every order.',
     bookings:
       'We host marriage parties, birthdays, meetings & ceremonies on a per-plate basis. Call to enquire.',
   },
