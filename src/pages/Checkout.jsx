@@ -273,6 +273,16 @@ export default function Checkout() {
 
             <dl className="space-y-1.5 text-sm">
               <Line label="Subtotal" value={rupee(cart.subtotal)} />
+              {cart.discountAmount > 0 && (
+                <Line
+                  label={
+                    <span className="text-spice-700">
+                      {cart.promoLabel || 'Discount'} ({cart.promoPercent}% off)
+                    </span>
+                  }
+                  value={<span className="text-spice-700">−{rupee(cart.discountAmount)}</span>}
+                />
+              )}
               {cart.deliveryFee > 0 && <Line label="Delivery charge" value={rupee(cart.deliveryFee)} />}
               <Line label={`GST (${cart.gstPercent}%)`} value={rupee(cart.gstAmount)} />
             </dl>

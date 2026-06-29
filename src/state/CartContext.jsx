@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
+import { restaurant } from '../config/restaurant.js';
 
 // Cart state lives in React Context with localStorage as the persistence
 // layer. No server required for Phase 1 — orders are dispatched via
@@ -108,15 +109,26 @@ export function CartProvider({ children }) {
     const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
     const subtotal = items.reduce((sum, i) => sum + (i.priceNum || 0) * i.quantity, 0);
 
+    // Promo discount on subtotal only. Delivery and GST are computed
+    // on the discounted base, matching India's GST-on-post-discount-
+    // supply-value convention.
+    const promo = restaurant.promotion;
+    const promoPercent = promo?.percent || 0;
+    const discountAmount = itemCount > 0 ? Math.round((subtotal * promoPercent) / 100) : 0;
+    const subtotalAfterDiscount = subtotal - discountAmount;
+
     const deliveryFee = itemCount > 0 ? DELIVERY_FEE : 0;
-    const gstAmount = Math.round(((subtotal + deliveryFee) * GST_PERCENT) / 100);
-    const total = subtotal + deliveryFee + gstAmount;
+    const gstAmount = Math.round(((subtotalAfterDiscount + deliveryFee) * GST_PERCENT) / 100);
+    const total = subtotalAfterDiscount + deliveryFee + gstAmount;
 
     return {
       items,
       itemsById: state.items,
       itemCount,
       subtotal,
+      discountAmount,
+      promoPercent,
+      promoLabel: promo?.label || null,
       deliveryFee,
       gstPercent: GST_PERCENT,
       gstAmount,

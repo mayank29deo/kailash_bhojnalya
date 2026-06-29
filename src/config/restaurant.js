@@ -71,6 +71,17 @@ export const restaurant = {
     { value: '100%', label: 'Pure vegetarian' },
   ],
 
+  // Active promotional discount. Set to `null` to disable. The percent
+  // is applied to the subtotal at checkout; GST is then computed on the
+  // discounted amount + delivery fee (consistent with Indian GST on
+  // post-discount supply value).
+  promotion: {
+    percent: 10,
+    label: 'July Special',
+    badge: '10% off this month',
+    description: '10% off all orders this month — applied automatically at checkout.',
+  },
+
   notes: {
     gst: 'GST charges will be extra as per applicable rates.',
     alcohol: 'Alcohol is strictly prohibited on our premises.',

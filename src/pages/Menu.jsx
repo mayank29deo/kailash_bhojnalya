@@ -50,6 +50,8 @@ export default function Menu() {
     }
   };
 
+  const promo = restaurant.promotion;
+
   return (
     <>
       <section className="section pt-12 pb-6 lg:pt-16">
@@ -59,6 +61,21 @@ export default function Menu() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-3xl text-center"
         >
+          {promo && (
+            <div className="mb-5">
+              <motion.span
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="inline-flex items-center gap-2 rounded-full border border-spice-500/50 bg-spice-400/20 px-4 py-1.5 text-xs font-semibold text-spice-700 sm:text-sm"
+              >
+                <span className="hidden sm:inline">🎉</span>
+                <span>
+                  <span className="font-bold">{promo.label}</span> · {promo.description}
+                </span>
+              </motion.span>
+            </div>
+          )}
           <span className="pill-leaf">Our Menu</span>
           <h1 className="heading-display mt-4 text-4xl sm:text-5xl">
             Everything we cook, <span className="gradient-text">all in one place.</span>

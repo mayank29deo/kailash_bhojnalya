@@ -117,6 +117,16 @@ export default function CartDrawer({ open, onClose }) {
                 <div className="border-t border-leaf-100 bg-white/90 px-6 py-5 backdrop-blur">
                   <dl className="space-y-1.5 text-sm">
                     <Row label="Subtotal" value={rupee(cart.subtotal)} />
+                    {cart.discountAmount > 0 && (
+                      <Row
+                        label={
+                          <span className="text-spice-700">
+                            {cart.promoLabel || 'Discount'} ({cart.promoPercent}% off)
+                          </span>
+                        }
+                        value={<span className="text-spice-700">−{rupee(cart.discountAmount)}</span>}
+                      />
+                    )}
                     {cart.deliveryFee > 0 && (
                       <Row label="Delivery charge" value={rupee(cart.deliveryFee)} />
                     )}
