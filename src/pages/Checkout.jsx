@@ -108,14 +108,17 @@ export default function Checkout() {
       paymentMethod: form.paymentMethod,
     };
 
-    // Persist to Supabase if configured (non-blocking — proceed regardless)
-    try {
-      await persistOrder({ order, cart });
-    } catch (err) {
-      // Already logged in service. Don't block the WhatsApp send.
-    }
+    // Fire-and-forget the DB persist. WhatsApp is the customer-facing
+    // path and MUST NOT wait on Supabase — if the DB is slow or down,
+    // the customer still gets through to WhatsApp and the order still
+    // reaches the kitchen. orderService internally caps at a 6s
+    // timeout so even the background promise can't leak forever.
+    persistOrder({ order, cart }).catch((err) => {
+      console.warn('[checkout] background persist failed:', err?.message);
+    });
 
-    // Build link first so we can show a manual fallback if popup blocked
+    // Build the link before opening so the success view can offer a
+    // manual fallback if the popup was blocked.
     const link = buildWhatsappLink({ order, cart });
     sendOrderToWhatsapp({ order, cart });
 

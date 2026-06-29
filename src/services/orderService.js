@@ -3,7 +3,18 @@ import { getSupabase } from '../lib/supabase.js';
 // Persists an order to Supabase if configured. Returns a result object
 // either way so the caller can still proceed to the WhatsApp send step
 // even when the database is unavailable — WhatsApp is the source of
-// truth in Phase 1; Supabase is a record/admin convenience.
+// truth for the customer; Supabase is a record/admin convenience.
+//
+// Notes:
+//   - We deliberately don't request the inserted row back (no .select()
+//     chained). PostgREST would otherwise run a SELECT on the new row
+//     which evaluates the "orders admin read" RLS policy → calls
+//     is_admin() → fails for anon if the function's EXECUTE grant
+//     ever drifts. Plus we don't actually use the returned id.
+//   - Wrapped in Promise.race with a 6s timeout so a stalled mobile
+//     connection can never hang the checkout button.
+
+const PERSIST_TIMEOUT_MS = 6000;
 
 export async function persistOrder({ order, cart }) {
   const supabase = getSupabase();
@@ -33,17 +44,20 @@ export async function persistOrder({ order, cart }) {
     return { ok: true, offline: true, payload };
   }
 
-  const { data, error } = await supabase
-    .from('orders')
-    .insert(payload)
-    .select('id')
-    .single();
+  try {
+    const insertPromise = supabase.from('orders').insert(payload);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Supabase insert timed out')), PERSIST_TIMEOUT_MS)
+    );
+    const { error } = await Promise.race([insertPromise, timeoutPromise]);
 
-  if (error) {
-    console.error('[orderService] failed to persist order', error);
-    // Don't block the customer — they can still reach WhatsApp
-    return { ok: false, error: error.message, offline: true, payload };
+    if (error) {
+      console.warn('[orderService] failed to persist order:', error.message);
+      return { ok: false, error: error.message, payload };
+    }
+    return { ok: true, payload };
+  } catch (err) {
+    console.warn('[orderService] persist crashed or timed out:', err?.message);
+    return { ok: false, error: err?.message ?? 'unknown error', payload };
   }
-
-  return { ok: true, orderId: data?.id, payload };
 }
